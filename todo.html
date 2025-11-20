@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To Do App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <main>
+        <form>
+            <input type="text" id="name" placeholder="Add new Name">
+            <button onclick="addlist()">Add</button>
+        </form>
+        <ul class="listall" id="namelist">
+        </ul>
+    </main>
+    <script>
+        let arr = JSON.parse(localStorage.getItem("names")) || [];
+
+
+        function showlist() {
+            let list = document.getElementById('namelist');
+            list.innerHTML = arr
+                .map((name, index) => {
+                    return `
+            <li>
+              <span>${name}</span>
+              <div class="actions">
+                <button onclick="editName(${index})">Edit</button>
+                <button onclick="deleteName(${index})">Delete</button>
+              </div>
+            </li>
+          `;
+                })
+                .join("");
+        }
+
+        function addlist() {
+            let input = document.getElementById('name');
+            let nameValue = input.value;
+            arr.push(nameValue);
+            savelocal();
+            input.value = ""; 
+            showlist();
+
+        }
+
+        function deleteName(index) {
+            arr.splice(index, 1);
+            savelocal();
+            showlist();
+        }
+
+        function editName(index) {
+            let alter = prompt("Enter new name");
+            arr[index] = alter;
+            savelocal();
+            showlist();
+        }
+        function savelocal() {
+            localStorage.setItem("names", JSON.stringify(arr));
+        }
+        showlist();
+    </script>
+</body>
+
+</html>
